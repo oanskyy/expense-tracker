@@ -8,3 +8,11 @@ const form = document.getElementById('form')
 const text = document.getElementById('text') 
 const amount = document.getElementById('amount') 
 
+const dummyTransactions = [
+  {id:1, text: "Flower", amount: -20}, 
+  {id:2, text: "Salary", amount: 2500}, 
+  {id:3, text: "Book", amount: -10}, 
+  {id:4, text: "Clothes", amount: 200} 
+]
+
+let transactions = dummyTransactions;
