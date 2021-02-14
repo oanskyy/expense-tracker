@@ -38,7 +38,6 @@ function addTransactionDOM(transaction) {
 // Init app 
 function init() { 
   list.innerHTML = ''; 
-
   transactions.forEach(addTransactionDOM);
 }
 
