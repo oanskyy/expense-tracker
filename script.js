@@ -8,47 +8,54 @@ const form = document.getElementById("form")
 const text = document.getElementById("text")
 const amount = document.getElementById("amount")
 
-const dummyTransactions = [
-  { id: 1, text: "Flower", amount: -20 },
-  { id: 2, text: "Salary", amount: 300 },
-  { id: 3, text: "Book", amount: -10 },
-  { id: 4, text: "Clothes", amount: 150 }
-]
+const localStorageTransactions = JSON.parse(
+  localStorage.getItem("transactions")
+)
+
+let transactions =
+  localStorage.getItem("transactions") !== null ? localStorageTransactions : []
+
+// const dummyTransactions = [
+//   { id: 1, text: "Flower", amount: -20 },
+//   { id: 2, text: "Salary", amount: 300 },
+//   { id: 3, text: "Book", amount: -10 },
+//   { id: 4, text: "Clothes", amount: 150 }
+// ]
 
 //global state for transaction, later will link up local storage
-let transactions = dummyTransactions
+// let transactions = dummyTransactions;
 
-// Add transactions 
-function addTransaction(e) { 
+// Add transactions
+function addTransaction(e) {
   // pass in our event parameter. first thing we want to do is to prevent default since this is a sumbit form and we dont actually want it to submit
-  e.preventDefault(); 
+  e.preventDefault()
 
-  if(text.value.trim() === '' && amount.value.trim() === '') { 
+  if (text.value.trim() === "" && amount.value.trim() === "") {
     alert("Please add text and amount")
-  } else { 
-    const transaction = { 
-      ID: generateID(), 
-      text: text.value, 
+  } else {
+    const transaction = {
+      ID: generateID(),
+      text: text.value,
       amount: +amount.value
-    };
+    }
 
     // Add it to total transactions
-    transactions.push(transaction);
-    addTransactionDOM(transaction);
-    updateValues();
+    transactions.push(transaction)
+    addTransactionDOM(transaction)
+    updateValues()
+    updateLocalStorage()
 
-    text.value = "";
-    amount.value = "";
+    text.value = ""
+    amount.value = ""
 
     console.log(transaction)
   }
 }
 
-// Generate random ID 
-function generateID() { 
+// Generate random ID
+function generateID() {
   return Math.floor(Math.random() * 1000)
 }
-
 
 // Add transactions to DOM list
 function addTransactionDOM(transaction) {
@@ -61,7 +68,9 @@ function addTransactionDOM(transaction) {
   item.innerHTML = ` 
     ${transaction.text} 
     <span>${sign}${Math.abs(transaction.amount)}</span>
-    <button class="delete-btn" onClick="removeTransaction(${transaction.id})">x</button>
+    <button class="delete-btn"  onClick="removeTransaction(${
+      transaction.id
+    })">x</button>
   `
 
   list.appendChild(item)
@@ -69,35 +78,41 @@ function addTransactionDOM(transaction) {
 
 // Update the balance, income and expense
 function updateValues() {
-  const amounts = transactions
-    .map(transaction => transaction.amount)
+  const amounts = transactions.map(transaction => transaction.amount)
   console.log(amounts)
 
-  const total = amounts
-    .reduce((acc, item) => (acc += item), 0).toFixed(2);
+  const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2)
 
   const income = amounts
     .filter(item => item > 0)
     .reduce((acc, item) => (acc += item), 0)
-    .toFixed(2);
+    .toFixed(2)
 
   const expense = amounts
     .filter(item => item < 0)
     .reduce((acc, item) => (acc += item), 0)
-    .toFixed(2);
+    .toFixed(2)
 
-  console.log(income);
-  console.log(expense);
+  console.log(income)
+  console.log(expense)
 
-  balance.innerText = `$${total}`;
-  money_plus.innerText = `$${income}`;
-  money_minus.innerText = `$${expense}`;
+  balance.innerText = `$${total}`
+  money_plus.innerText = `$${income}`
+  money_minus.innerText = `$${expense}`
 }
 
-// Remove transaction by ID 
-function removeTransaction(id) { 
-  transactions = transaction
-  .filter(transaction => transaction.id !== id);
+// Remove transaction by ID
+function removeTransaction(id) {
+  // !!! this looks like a bug, should be transactions.filter() not transaction
+  transactions = transaction.filter(transaction => transaction.id !== id)
+
+  updateLocalStorage()
+  init()
+}
+
+// Update localStorage transactions
+function updateLocalStorage() {
+  localStorage.setItem("transactions", JSON.stringify(transactions))
 }
 
 // Init app
@@ -110,5 +125,4 @@ function init() {
 
 init()
 
-form.addEventListener("submit", addTransaction) ;
-
+form.addEventListener("submit", addTransaction)
