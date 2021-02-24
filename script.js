@@ -29,8 +29,17 @@ function addTransaction(e) {
     const transaction = { 
       ID: generateID(), 
       text: text.value, 
-      amount: amount.value
+      amount: +amount.value
     };
+
+    // Add it to total transactions
+    transactions.push(transaction);
+    addTransactionDOM(transaction);
+    updateValues();
+
+    text.value = "";
+    amount.value = "";
+
     console.log(transaction)
   }
 }
