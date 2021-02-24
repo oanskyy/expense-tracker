@@ -18,6 +18,29 @@ const dummyTransactions = [
 //global state for transaction, later will link up local storage
 let transactions = dummyTransactions
 
+// Add transactions 
+function addTransaction(e) { 
+  // pass in our event parameter. first thing we want to do is to prevent default since this is a sumbit form and we dont actually want it to submit
+  e.preventDefault(); 
+
+  if(text.value.trim() === '' && amount.value.trim() === '') { 
+    alert("Please add text and amount")
+  } else { 
+    const transaction = { 
+      ID: generateID(), 
+      text: text.value, 
+      amount: amount.value
+    };
+    console.log(transaction)
+  }
+}
+
+// Generate random ID 
+function generateID() { 
+  return Math.floor(Math.random() * 1000)
+}
+
+
 // Add transactions to DOM list
 function addTransactionDOM(transaction) {
   // Get sign, in order to distinguish the income from the expense
@@ -62,6 +85,11 @@ function updateValues() {
   money_minus.innerText = `$${expense}`;
 }
 
+
+
+form.addEventListener("submit", addTransaction) ;
+
+
 // Init app
 function init() {
   list.innerHTML = ""
@@ -71,5 +99,3 @@ function init() {
 }
 
 init()
-
-
