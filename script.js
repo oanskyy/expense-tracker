@@ -56,6 +56,10 @@ function updateValues() {
 
   console.log(income);
   console.log(expense);
+
+  balance.innerText = `$${total}`;
+  money_plus.innerText = `$${income}`;
+  money_minus.innerText = `$${expense}`;
 }
 
 // Init app
